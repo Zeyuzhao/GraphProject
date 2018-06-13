@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Zip File">
+    <output-path>$PROJECT_DIR$/out/artifacts/Zip_File</output-path>
+    <root id="root">
+      <element id="archive" name="final.zip">
+        <element id="dir-copy" path="$PROJECT_DIR$/src" />
+        <element id="directory" name="data">
+          <element id="dir-copy" path="$PROJECT_DIR$/data" />
+        </element>
+      </element>
+      <element id="module-output" name="GraphProject" />
+    </root>
+  </artifact>
+</component>
