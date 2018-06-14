@@ -11,10 +11,10 @@ import java.util.*;
 public class TestGraph extends Application {
     @Override // Override the start method in the Application class
     public void start(Stage primaryStage) {
-        System.out.println("Please enter the name of the file");
+        System.out.println("Please enter the name of the file, it must include the coordinates.");
         Scanner reader = new Scanner(System.in);
         String fileName = reader.nextLine();
-        System.out.println("Please enter a pair of vertices; format: [(int) (int)] ");
+        System.out.println("Please enter a pair of vertices; format: [(int) (int)]; the first number will be used to calculate the clustering ");
         String pair = reader.nextLine();
         String[] pInt = pair.split(" ");
         int a = Integer.parseInt(pInt[0]);
@@ -35,6 +35,9 @@ public class TestGraph extends Application {
         System.out.println("Bipartite: " + isBipartite(graph, 0));
         System.out.format("A shortest path from vertex %d to %d: ", a, b);
         shortPath(graph, a, b);
+        System.out.println("Degree of Centrality: " + degreeOfCentrality(graph, a));
+        System.out.println("Num Triangles: " + findNumTriangles(graph, a));
+        System.out.println("Clustering index: " + clusteringNum(graph, a));
     }
 
     static class City implements Displayable {
@@ -137,6 +140,32 @@ public class TestGraph extends Application {
         tree.printPath(b);
     }
 
+    public static int findNumTriangles(AbstractGraph g, int a)
+    {
+        HashSet<Integer> neighbors = new HashSet<>();
+
+        neighbors.addAll(g.getNeighbors(a));
+        System.out.println(neighbors);
+        int triangles = 0;
+        for (int i : neighbors)
+        {
+            HashSet<Integer> nOfN = new HashSet<>(g.getNeighbors(i));
+            System.out.println(nOfN);
+            nOfN.retainAll(neighbors);
+            triangles += nOfN.size();
+        }
+        return triangles / 2;
+    }
+    public static double degreeOfCentrality(AbstractGraph g, int a)
+    {
+        return (double) g.getNeighbors(a).size() / (g.getVertices().size() - 1);
+    }
+
+    public static double clusteringNum(AbstractGraph g, int a)
+    {
+        int v = g.getVertices().size();
+        return (double) 4 * findNumTriangles(g, a) / (v * (v - 1));
+    }
     public boolean isBipartite(AbstractGraph g, int v) {
         List<Integer> searchOrder = new ArrayList<>();
         int[] parent = new int[g.vertices.size()];
